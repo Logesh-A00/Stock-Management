@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Stock Management</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(80deg, #ff4b4b, #ffeb3b, white);
+        margin: 0;
+        padding: 0;
+    }
+    .a1 {
+        width: 90%;
+        max-width: 800px;
+        margin: auto;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        margin-top: 130px;
+    }
+    h2 {
+        text-align: center;
+        color: #d32f2f;
+    }
+    input, textarea, button {
+        width: 100%;
+        padding: 10px;
+        margin: 5px 0;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+    button {
+        background: #ff9800;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    button:hover {
+        background: #e68900;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+    }
+    table, th, td {
+        border: 1px solid #ccc;
+    }
+    th {
+        background: #f44336;
+        color: white;
+        padding: 10px;
+    }
+    td {
+        padding: 8px;
+        text-align: center;
+    }
+    .a2 {
+        background: rgba(255, 255, 255, 0.9);
+        padding: 15px;
+        text-align: center;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        font-size: 18px;
+        color: #d32f2f;
+    }
+    .a3 {
+        display: none;
+    }
+</style>
+</head>
+<body>
+
+<div id="a4" class="a1">
+    <h2>Admin Login</h2>
+    <input type="text" id="a5" placeholder="Enter Username">
+    <input type="password" id="a6" placeholder="Enter Password">
+    <button onclick="a7()">Login</button>
+    <p id="a8" style="color:red;"></p>
+</div>
+
+<div id="a9" class="a1 a3">
+    <div class="a2">
+        Total Products: <span id="a10">0</span>
+    </div>
+    <button onclick="a11()">⬅ Back</button>
+    <h2>Add Product</h2>
+    <input type="text" id="a12" placeholder="Product Name">
+    <input type="number" id="a13" placeholder="Price">
+    <input type="number" id="a14" placeholder="Stock">
+    <textarea id="a15" placeholder="Description"></textarea>
+    <button onclick="a16()">Add Product</button>
+    <p id="a17" style="color:red;"></p>
+    <h2>Product List</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Stock</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody id="a18"></tbody>
+    </table>
+</div>
+
+<script>
+    const b1 = "admin";
+    const b2 = "admin@123";
+
+    function a7() {
+        const b3 = document.getElementById("a5").value.trim();
+        const b4 = document.getElementById("a6").value.trim();
+        if (b3 === b1 && b4 === b2) {
+            document.getElementById("a4").classList.add("a3");
+            document.getElementById("a9").classList.remove("a3");
+            a19();
+        } else {
+            document.getElementById("a8").textContent = "Invalid Username or Password!";
+        }
+    }
+
+    function a11() {
+        document.getElementById("a9").classList.add("a3");
+        document.getElementById("a4").classList.remove("a3");
+        document.getElementById("a5").value = "";
+        document.getElementById("a6").value = "";
+    }
+
+    function a16() {
+        const b5 = document.getElementById("a12").value.trim();
+        const b6 = document.getElementById("a13").value.trim();
+        const b7 = document.getElementById("a14").value.trim();
+        const b8 = document.getElementById("a15").value.trim();
+
+        if (!b5 || !b6 || !b7 || !b8) {
+            document.getElementById("a17").textContent = "All fields are required!";
+            return;
+        }
+        if (b6 <= 0 || b7 < 0) {
+            document.getElementById("a17").textContent = "Enter valid price and stock!";
+            return;
+        }
+
+        let b9 = JSON.parse(localStorage.getItem("products")) || [];
+        b9.push({ name: b5, price: b6, stock: b7, desc: b8 });
+        localStorage.setItem("products", JSON.stringify(b9));
+
+        document.getElementById("a17").textContent = "";
+        a20();
+        a19();
+    }
+
+    function a19() {
+        let b9 = JSON.parse(localStorage.getItem("products")) || [];
+        let b10 = document.getElementById("a18");
+        b10.innerHTML = "";
+        b9.forEach(p => {
+            let b11 = `
+                <tr>
+                    <td>${p.name}</td>
+                    <td>${p.price}</td>
+                    <td>${p.stock}</td>
+                    <td>${p.desc}</td>
+                </tr>
+            `;
+            b10.innerHTML += b11;
+        });
+        document.getElementById("a10").textContent = b9.length;
+    }
+
+    function a20() {
+        document.getElementById("a12").value = "";
+        document.getElementById("a13").value = "";
+        document.getElementById("a14").value = "";
+        document.getElementById("a15").value = "";
+    }
+</script>
+
+</body>
+</html>
